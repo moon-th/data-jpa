@@ -175,7 +175,7 @@ class MemberRepositoryTest {
     @Test
     public void paging() {
 
-        //given
+        // 테스트용 데이터 입력
         memberRepository.save(new Member("member1", 10));
         memberRepository.save(new Member("member2", 10));
         memberRepository.save(new Member("member3", 10));
@@ -183,24 +183,27 @@ class MemberRepositoryTest {
         memberRepository.save(new Member("member", 10));
 
         int age = 10;
+        // PageRequest 객체를 이용하여 page,size,sort 등을 입력 하여 페이징 및 정렬 조건을 입력한다.
         PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "username"));
 
 
-        //when
+        //page 객체를 반환 받는다.
         Page<Member> page = memberRepository.findByAge(age, pageRequest);
-//    Slice<Member> page = memberRepository.findByAge(age, pageRequest);
 
+        //Slice<Member> page = memberRepository.findByAge(age, pageRequest);
+
+        //Member 객체에서 MemberDTO 객체로 변환 시켜 준다.
         Page<MemberDto> toMap = page.map(m -> new MemberDto(m.getId(), m.getUsername(), null));
 
-        //then
+        //page.getContent() 를 사용하여 MemberDTO 객체만 추출
         List<Member> content = page.getContent();
 //      long totalElements = page.getTotalElements();
 
         for (Member member : content) {
             System.out.println("member = " + member);
         }
-//      System.out.println("totalElements = " + totalElements);
 
+//      System.out.println("totalElements = " + totalElements);
 //      assertThat(page.getTotalElements()).isEqualTo(5);
         assertThat(content.size()).isEqualTo(3);
         assertThat(page.getNumber()).isEqualTo(0);

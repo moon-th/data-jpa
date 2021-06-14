@@ -52,7 +52,7 @@ public interface MemberRepository extends JpaRepository<Member,Long> ,MemberRepo
     @Query("select m from Member m left join fetch m.team")
     List<Member> findMemberFetchJoin();
 
-    @Override
+    @Override //기본 적으로 findAll 을 제공하기 때문에 Override 하여 재정의 후 사용
     @EntityGraph(attributePaths = {"team"}) // DataJpa 에서 fetch 조인을 하기 위한 설정
     List<Member> findAll();
 
